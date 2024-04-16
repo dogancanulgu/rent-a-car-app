@@ -1,0 +1,41 @@
+html,
+body,
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-c-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.h-full {
+  height: 100vh;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.w-500 {
+  width: 500px;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+.fl-r {
+  float: right;
+}

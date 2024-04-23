@@ -1,11 +1,19 @@
 'use client';
 import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Divider } from 'antd';
+import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import Register from '@/components/register/Register';
+import axios from 'axios';
 
 const RegisterPage = () => {
-  const onFinish = (values) => console.log(values);
+  const onFinish = async (values) => {
+    try {
+      const response = await axios.post('/api/user/register', values);
+      message.success(response.data.message);
+    } catch (error) {
+      message.error(error.response.data.message || error.message);
+    }
+  };
 
   return (
     <div className='flex-c-c h-full'>

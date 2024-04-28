@@ -4,14 +4,20 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import Register from '@/components/register/Register';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 const RegisterPage = () => {
+  const dispatch = useDispatch();
+
   const onFinish = async (values) => {
     try {
-      const response = await axios.post('/api/user/register', values);
+      dispatch(setLoading(true));
+      const response = await axios.post('/api/auth/register', values);
       message.success(response.data.message);
     } catch (error) {
       message.error(error.response.data.message || error.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 

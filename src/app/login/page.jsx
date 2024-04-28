@@ -3,14 +3,24 @@ import React from 'react';
 import { Divider, message } from 'antd';
 import Login from '@/components/login/Login';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '@/redux/loadingSlice';
 
 const LoginPage = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const onFinish = async (values) => {
     try {
-      const response = await axios.post('/api/user/login', values);
+      dispatch(setLoading(true));
+      const response = await axios.post('/api/auth/login', values);
       message.success(response.data.message);
+      router.push('/');
     } catch (error) {
       message.error(error.response.data.message || error.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 

@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import connectDB from '@/config/dbConfig';
 import User from '@/models/userModel';
 import bcrypt from 'bcryptjs';
@@ -27,8 +28,8 @@ export async function POST(request) {
     // all information suitable. create user
     await User.create(newUser);
 
-    return Response.json({ message: 'User created successfully' }, { status: 201 });
+    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
   } catch (error) {
-    return Response.json({ message: error.message }, { status: 400 });
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
 }

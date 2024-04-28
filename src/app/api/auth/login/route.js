@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import connectDB from '@/config/dbConfig';
 import User from '@/models/userModel';
 import bcrypt from 'bcryptjs';
@@ -32,14 +33,15 @@ export async function POST(request) {
     //   throw new Error('User not found or password is incorrect');
     // }
 
-    // all field correct. create token
+    // all fields are correct. create token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return Response.json(
-      { message: 'Login successful' },
-      { status: 200, headers: { 'Set-Cookie': `token=${token}` } }
-    );
+    // set token
+    const response = NextResponse.json({ message: 'Login successful' }, { status: 200 });
+    response.cookies.set('token', token, { httpOnly: true, path: '/' });
+
+    return response;
   } catch (error) {
-    return Response.json({ message: error.message }, { status: 400 });
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
 }

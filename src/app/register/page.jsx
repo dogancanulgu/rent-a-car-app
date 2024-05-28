@@ -5,15 +5,19 @@ import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import Register from '@/components/register/Register';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { setLoading } from '@/redux/loadingSlice';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const onFinish = async (values) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.post('/api/auth/register', values);
       message.success(response.data.message);
+      router.push('/login');
     } catch (error) {
       message.error(error.response.data.message || error.message);
     } finally {

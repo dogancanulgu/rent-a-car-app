@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 
 export const authPath = ['/login', '/register'];
 
-export async function getUserIdByValidToken(request) {
+// Get user id by valid token
+export async function getUserIdAndRoleByValidToken(request) {
   try {
     //get token from cookies
     const token = request.cookies.get('token')?.value;
@@ -10,10 +11,9 @@ export async function getUserIdByValidToken(request) {
       throw new Error('No token found');
     }
     // Verify token and get user id
-    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);    
-    const userId = decodeToken._id;
+    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    return userId;
+    return decodeToken;
   } catch (error) {
     throw new Error(error.message ?? 'Invalid token');
   }

@@ -1,18 +1,12 @@
 import React from 'react';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Divider } from 'antd';
+import { Button, Checkbox, Form, Input, Divider, Select } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import Link from 'next/link';
 
 const Register = ({ onFinish }) => {
   return (
-    <Form
-      name='register'
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-    >
+    <Form name='register' initialValues={{ role: 'user', language: 'tr' }} onFinish={onFinish}>
       <FormItem
         name='name'
         rules={[
@@ -60,6 +54,26 @@ const Register = ({ onFinish }) => {
       >
         <Input.Password prefix={<LockOutlined />} type='password' placeholder='Password' />
       </FormItem>
+
+      <Form.Item name='role' rules={[{ required: true, message: 'Please select your Role!' }]}>
+        <Select
+          placeholder='Role'
+          options={[
+            { value: 'user', label: <span>User</span> },
+            { value: 'owner', label: <span>Owner</span> },
+          ]}
+        />
+      </Form.Item>
+
+      <Form.Item name='language' rules={[{ required: true, message: 'Please select your Language!' }]}>
+        <Select
+          placeholder='Language'
+          options={[
+            { value: 'tr', label: <span>Türkçe</span> },
+            { value: 'en', label: <span>English</span> },
+          ]}
+        />
+      </Form.Item>
 
       <FormItem>
         <Button type='primary' htmlType='submit' className='fullWidth'>

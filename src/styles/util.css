@@ -39,3 +39,7 @@ body,
 .fl-r {
   float: right;
 }
+
+.ant-cascader {
+  width: unset;
+}

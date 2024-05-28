@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/config/dbConfig';
-import User from '@/models/userModel';
+import Car from '@/models/carModel';
 import { getUserIdAndRoleByValidToken } from '@/util/Util';
 
 connectDB();
 
-export async function GET(request) {
+export async function POST(request) {
   try {
     const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
-    const user = await User.findById(userId).select('-password');
+    const requestInfo = await request.json();
+    requestInfo.owner = userId;
 
-    return NextResponse.json({ data: user, message: 'User info fethed successfully.' }, { status: 200 });
+    const car = await Car.create(requestInfo);
+    return NextResponse.json({ message: 'Car created successfully', data: car }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }

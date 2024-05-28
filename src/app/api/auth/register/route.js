@@ -8,6 +8,7 @@ connectDB();
 export async function POST(request) {
   try {
     const newUser = await request.json();
+    console.log("🚀 ~ POST ~ newUser:", newUser)
 
     // all fields must be filled
     if (!newUser.email || !newUser.password || !newUser.name || !newUser.surname) {

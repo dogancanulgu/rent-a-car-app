@@ -1,9 +1,11 @@
-import React from 'react'
+import CarList from '@/components/carList/CarList';
+import React from 'react';
 
 const Cars = () => {
-  return (
-    <div>Cars</div>
-  )
-}
+  //get all car list
+  
 
-export default Cars
+  return <CarList />;
+};
+
+export default Cars;

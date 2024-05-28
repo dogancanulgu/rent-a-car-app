@@ -8,15 +8,48 @@ import { setUser } from '@/redux/userSlice';
 import { setLoading } from '@/redux/loadingSlice';
 
 const { Header, Content, Footer } = Layout;
-const items = [
-  // {
-  //   key: 0,
-  //   label: 'user',
-  // },
-  // {
-  //   key: 1,
-  //   label: 'car',
-  // },
+const userItems = [
+  { key: '', label: 'Home' },
+  {
+    key: 'bookings',
+    label: 'Bookings',
+  },
+  {
+    key: 'profile',
+    label: 'Profile',
+  },
+];
+
+const ownerItems = [
+  { key: '', label: 'Home' },
+  {
+    key: 'bookings',
+    label: 'Bookings',
+  },
+  {
+    key: 'cars',
+    label: 'Cars',
+  },
+  {
+    key: 'profile',
+    label: 'Profile',
+  },
+];
+
+const adminItems = [
+  { key: '', label: 'Home' },
+  {
+    key: 'bookings',
+    label: 'Bookings',
+  },
+  {
+    key: 'users',
+    label: 'Users',
+  },
+  {
+    key: 'cars',
+    label: 'Cars',
+  },
 ];
 
 const Layouts = ({ children }) => {
@@ -59,6 +92,15 @@ const Layouts = ({ children }) => {
     }
   };
 
+  const getItems = () => {
+    const getRole = {
+      user: userItems,
+      owner: ownerItems,
+      admin: adminItems,
+    };
+    return getRole[user?.role] ?? userItems;
+  };
+
   return (
     <Layout style={{ height: '100vh' }}>
       <Header
@@ -76,12 +118,12 @@ const Layouts = ({ children }) => {
           style={{ cursor: 'pointer' }}
           onClick={() => router.push('/')}
         />
-        ;
         <Menu
           theme='dark'
           mode='horizontal'
           // defaultSelectedKeys={['0']}
-          items={items}
+          onClick={(item) => router.push('/' + item.key)}
+          items={getItems()}
           style={{
             flex: 1,
             minWidth: 0,
@@ -94,12 +136,12 @@ const Layouts = ({ children }) => {
               onClick={() => router.push('/profile')}
             >{`${user.name} ${user.surname}`}</div>
             <div style={{ cursor: 'pointer' }} onClick={logoutUser}>
-              <i class='ri-logout-box-r-line' />
+              <i className='ri-logout-box-r-line' />
             </div>
           </div>
         )}
       </Header>
-      <Content style={{ padding: '0 48px' }}>
+      <Content style={{ padding: '16px 48px', overflowX: 'auto' }}>
         {/* <Breadcrumb
           style={{
             margin: '16px 0',

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { authPath } from './util/Util';
 
-export function middleware(request) {
+export async function middleware(request) {
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
   const isAuthPath = authPath.includes(pathname);

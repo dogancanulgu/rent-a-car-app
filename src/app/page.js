@@ -1,4 +1,5 @@
-export default function Home({params: {lang}}) {
-  console.log("🚀 ~ Home ~ lang:", lang)
-  return <div>Home</div>;
+import HomePage from '@/components/homePage/HomePage';
+
+export default function Home({ params: { lang } }) {
+  return <HomePage />;
 }

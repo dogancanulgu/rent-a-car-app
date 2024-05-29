@@ -9,12 +9,19 @@ export async function PUT(request, { params }) {
   try {
     const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
 
+    const newUserInfo = await request.json();
     if (role == 'admin') {
-      const newUserInfo = await request.json();
       await User.findByIdAndUpdate(params.userId, newUserInfo);
       return NextResponse.json({ message: 'User is updated successfully' }, { status: 200 });
     } else {
-      throw new Error('You are not authorized to update this user');
+      // user and owner can update only own profile
+      const user = await User.findById(params.userId);
+      if (user._id.toString() === userId) {
+        await User.findByIdAndUpdate(params.userId, newUserInfo);
+        return NextResponse.json({ message: 'User is updated successfully' }, { status: 200 });
+      } else {
+        throw new Error('You are not authorized to update the user which is not own profile');
+      }
     }
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });

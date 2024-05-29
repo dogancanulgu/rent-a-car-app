@@ -162,6 +162,7 @@ const AddCar = () => {
 
   const onChange = (value, selectedOptions) => {
     console.log('🚀 ~ onChange ~ value, selectedOptions:', value, selectedOptions);
+    setInitialValues({});
     if (value.length == 4) {
       const [makeid, modelid, year, trimid] = value;
       getCarDetailsByTrimId(trimid);
@@ -184,9 +185,6 @@ const AddCar = () => {
 
   return (
     <Flex gap='middle' vertical>
-      {/* Burada araç modeli yılı gibi bilgiler seçildikten sonra araç sahibi araca ait km, fiyat, resim gibi
-      bilgileri ekleyecek. Ayrıca araçlar status approved olarak listelenecek fakat araç sahibi pasif hale
-      getirebilecek. */}
       <Cascader options={options} loadData={loadData} onChange={onChange} changeOnSelect />
       {Object.keys(initialValues).length > 0 && (
         <AddCarForm initialValues={initialValues} onFinish={onFinish} />

@@ -5,12 +5,13 @@ import Car from '@/models/carModel';
 
 export async function GET(request) {
   try {
-    // get user id from token
+    // get user id and role from token
     const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
 
     // get all filters from parameters
     const filter = Object.fromEntries(request.nextUrl.searchParams.entries());
 
+    // user can not access cars which are not active
     if (role === 'user') {
       filter.active = true;
     }
@@ -26,6 +27,13 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
+
+    // user can not be allowed to add a car
+    if(role === "user") {
+      throw new Error("You are not allowed to add a car");
+    }
+
     const requestInfo = await request.json();
     console.log('🚀 ~ GET ~ requestInfo:', requestInfo);
 
@@ -39,17 +47,17 @@ export async function POST(request) {
       },
     };
 
-    if (requestInfo.url == 'makes') {
-      return NextResponse.json({ data: makesData }, { status: 200 });
-    } else if (requestInfo.url == 'models') {
-      return NextResponse.json({ data: modelsData }, { status: 200 });
-    } else if (requestInfo.url == 'years') {
-      return NextResponse.json({ data: yearsData }, { status: 200 });
-    } else if (requestInfo.url == 'trims') {
-      return NextResponse.json({ data: trimsData }, { status: 200 });
-    } else if (requestInfo.url == 'trims/14894') {
-      return NextResponse.json({ data: carData }, { status: 200 });
-    }
+    // if (requestInfo.url == 'makes') {
+    //   return NextResponse.json({ data: makesData }, { status: 200 });
+    // } else if (requestInfo.url == 'models') {
+    //   return NextResponse.json({ data: modelsData }, { status: 200 });
+    // } else if (requestInfo.url == 'years') {
+    //   return NextResponse.json({ data: yearsData }, { status: 200 });
+    // } else if (requestInfo.url == 'trims') {
+    //   return NextResponse.json({ data: trimsData }, { status: 200 });
+    // } else if (requestInfo.url == 'trims/14894') {
+    //   return NextResponse.json({ data: carData }, { status: 200 });
+    // }
     const response = await axios.request(options);
     // const data = response.data
 

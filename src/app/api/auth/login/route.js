@@ -39,7 +39,7 @@ export async function POST(request) {
     // }
 
     // all fields are correct. create token
-    const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     // set token
     const response = NextResponse.json({ message: 'Login successful' }, { status: 200 });

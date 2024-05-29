@@ -6,8 +6,7 @@ import { getUserIdAndRoleByValidToken } from '@/util/Util';
 // get the car detail by car id
 export async function GET(request, { params }) {
   try {
-    // const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
-    // const carInfo = await request.json()
+    const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
 
     // get car detail by car id
     const carList = await Car.findById(params.carId);
@@ -18,10 +17,22 @@ export async function GET(request, { params }) {
   }
 }
 
+// delete the car by car id
 export async function DELETE(request, { params }) {
   try {
-    // const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
+    const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
     // const carInfo = await request.json()
+    if (role === 'user') {
+      throw new Error('You are not authorized to delete the car');
+    }
+
+    // if the car is not owned by the user, then throw an error
+    if (role === 'owner') {
+      const car = await Car.findById(params.carId);
+      if (car.owner.toString() !== userId) {
+        throw new Error('You are not authorized to delete the car which is not owned by the user');
+      }
+    }
 
     await Car.findByIdAndDelete(params.carId);
 
@@ -33,7 +44,18 @@ export async function DELETE(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
-    // const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
+    const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
+    if (role === 'user') {
+      throw new Error('You are not authorized to update the car');
+    }
+
+    // if the car is not owned by the user, then throw an error
+    if (role === 'owner') {
+      const car = await Car.findById(params.carId);
+      if (car.owner.toString() !== userId) {
+        throw new Error('You are not authorized to update the car which is not owned by the user');
+      }
+    }
     const carInfo = await request.json();
 
     await Car.findByIdAndUpdate(params.carId, carInfo);

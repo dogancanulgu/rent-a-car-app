@@ -84,6 +84,7 @@ const CarList = () => {
     {
       title: 'Active',
       dataIndex: 'active',
+      render: (active) => (active ? 'Yes' : 'No'),
     },
     {
       title: 'Action',

@@ -1,16 +1,56 @@
 'use client';
-import React from 'react';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Divider, InputNumber } from 'antd';
+import React, { useEffect } from 'react';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Divider, Select, InputNumber, message } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { setLoading } from '@/redux/loadingSlice';
 
-const Profile = ({ initialValues, onFinish }) => {
+const Profile = () => {
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   getUserDetail();
+  // }, []);
+
+  const getUserDetail = async () => {
+    try {
+      dispatch(setLoading(true));
+      const response = await axios.get('/api/user');
+      dispatch(setUser(response.data.data));
+    } catch (error) {
+      message.error(error.response?.data.message || error.message);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const onFinish = async (value) => {
+    try {
+      const response = await axios.put(`api/users/${user._id}`, value);
+      message.success(response.data.message);
+      getUserDetail()
+    } catch (error) {
+      message.error(error.response?.data.message || error.message);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 
   return (
-    <Form name='register' initialValues={{ role: 'user', language: 'tr' }} onFinish={onFinish}>
+    <Form
+      name='register'
+      initialValues={{
+        name: user?.name,
+        surname: user?.surname,
+        email: user?.email,
+        language: 'tr',
+      }}
+      onFinish={onFinish}
+    >
       <FormItem
         name='name'
         rules={[
@@ -45,7 +85,7 @@ const Profile = ({ initialValues, onFinish }) => {
           },
         ]}
       >
-        <Input prefix={<MailOutlined />} placeholder='Email' />
+        <Input prefix={<MailOutlined />} placeholder='Email' disabled />
       </FormItem>
       {/* <FormItem
         name='password'

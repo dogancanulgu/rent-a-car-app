@@ -104,5 +104,6 @@
   "Users info fethed successfully": "Users info fethed successfully",
   "You are not authorized to get this request": "You are not authorized to get this request",
   "You are not authorized to update the user which is not own profile": "You are not authorized to update the user which is not own profile",
-  "All Users": "All Users"
+  "All Users": "All Users",
+  "You are not authorized to access this page. Please login again": "You are not authorized to access this page. Please login again"
 }

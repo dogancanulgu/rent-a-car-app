@@ -35,7 +35,7 @@ const Layouts = ({ children }) => {
     } catch (error) {
       message.error(error.response?.data?.message || error.message);
       // if there is an error to get the user info, force to user to logout or redirect to login page
-      logoutUser('You are not authorized to access this page. Please login again.');
+      logoutUser('You are not authorized to access this page. Please login again');
     } finally {
       dispatch(setLoading(false));
     }
@@ -45,9 +45,9 @@ const Layouts = ({ children }) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get('/api/auth/logout');
-      dispatch(setUser(null));
-      message.success(redirectMessage || response.data.message);
       router.push('/login');
+      message.success(redirectMessage ?? response.data.message);
+      dispatch(setUser(null));
     } catch (error) {
       message.error(error.response?.data?.message || error.message);
     } finally {

@@ -15,7 +15,7 @@ const CarList = () => {
   const { user } = useSelector((state) => state.user);
   const [carList, setCarList] = useState([]);
 
-  const addCar = () => router.push('/cars/add');
+  const addCar = () => router.push('/' + 'cars/add');
 
   useEffect(() => {
     getCarList();

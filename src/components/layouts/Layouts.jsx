@@ -45,7 +45,9 @@ const Layouts = ({ children }) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get('/api/auth/logout');
-      router.push('/login');
+      router.push('/' + 'login');
+      // router.replace('/' + 'login');
+      // router.refresh('/' + 'login');
       // message.success(redirectMessage ?? response.data.message);
       // dispatch(setUser(null));
     } catch (error) {

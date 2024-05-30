@@ -6,8 +6,10 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/loadingSlice';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -15,19 +17,19 @@ const LoginPage = () => {
     try {
       dispatch(setLoading(true));
       const response = await axios.post('/api/auth/login', values);
-      message.success(response.data.message);
+      message.success(t(response.data.message));
       router.push('/');
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
   };
 
   return (
-    <div className='flex-c-c h-full'>
+    <div className='flex-c-c fullHeight'>
       <div className='w-500 p-20' style={{ border: '1px solid black' }}>
-        <h1>Login</h1>
+        <h1>{t('Login')}</h1>
         <Divider />
         <Login onFinish={onFinish} />
       </div>

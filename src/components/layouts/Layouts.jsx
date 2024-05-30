@@ -6,53 +6,14 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/userSlice';
 import { setLoading } from '@/redux/loadingSlice';
+import { useTranslation } from 'react-i18next';
+import { SideBarItems } from '@/mockDatas/MockDatas';
 
 const { Header, Content, Footer } = Layout;
-const userItems = [
-  { key: '', label: 'Home' },
-  {
-    key: 'bookings',
-    label: 'Bookings',
-  },
-  {
-    key: 'profile',
-    label: 'Profile',
-  },
-];
-
-const ownerItems = [
-  { key: '', label: 'Home' },
-  {
-    key: 'bookings',
-    label: 'Bookings',
-  },
-  {
-    key: 'cars',
-    label: 'Cars',
-  },
-  {
-    key: 'profile',
-    label: 'Profile',
-  },
-];
-
-const adminItems = [
-  { key: '', label: 'Home' },
-  {
-    key: 'bookings',
-    label: 'Bookings',
-  },
-  {
-    key: 'users',
-    label: 'Users',
-  },
-  {
-    key: 'cars',
-    label: 'Cars',
-  },
-];
 
 const Layouts = ({ children }) => {
+  const { t, i18n } = useTranslation();
+  const { userItems, ownerItems, adminItems } = SideBarItems();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -69,9 +30,10 @@ const Layouts = ({ children }) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get('/api/user');
+      await i18n.changeLanguage(response.data.data.language);
       dispatch(setUser(response.data.data));
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(error.response?.data?.message || error.message);
       // if there is an error to get the user info, force to user to logout or redirect to login page
       logoutUser('You are not authorized to access this page. Please login again.');
     } finally {
@@ -83,10 +45,11 @@ const Layouts = ({ children }) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get('/api/auth/logout');
+      dispatch(setUser(null));
       message.success(redirectMessage || response.data.message);
       router.push('/login');
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(error.response?.data?.message || error.message);
     } finally {
       dispatch(setLoading(false));
     }
@@ -141,24 +104,7 @@ const Layouts = ({ children }) => {
           </div>
         )}
       </Header>
-      <Content style={{ padding: '16px 48px', overflowX: 'auto' }}>
-        {/* <Breadcrumb
-          style={{
-            margin: '16px 0',
-          }}
-          items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
-        /> */}
-        {/* <div
-          style={{
-            background: colorBgContainer,
-            minHeight: 280,
-            padding: 24,
-            borderRadius: borderRadiusLG,
-          }}
-        > */}
-        {children}
-        {/* </div> */}
-      </Content>
+      <Content style={{ padding: '16px 48px', overflowX: 'auto' }}>{children}</Content>
       <Footer style={{ textAlign: 'center' }}>Created by Doğancan Ülgü ©{new Date().getFullYear()}</Footer>
     </Layout>
   );

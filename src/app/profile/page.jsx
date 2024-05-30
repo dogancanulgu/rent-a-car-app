@@ -7,8 +7,11 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { setLoading } from '@/redux/loadingSlice';
+import { useTranslation } from 'react-i18next';
+import { setUser } from '@/redux/userSlice';
 
 const Profile = () => {
+  const { t, i18n } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -20,9 +23,10 @@ const Profile = () => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get('/api/user');
+      await i18n.changeLanguage(response.data.data.language);
       dispatch(setUser(response.data.data));
     } catch (error) {
-      message.error(error.response?.data.message || error.message);
+      message.error(t(error.response?.data.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -31,63 +35,65 @@ const Profile = () => {
   const onFinish = async (value) => {
     try {
       const response = await axios.put(`api/users/${user._id}`, value);
-      message.success(response.data.message);
-      getUserDetail()
+      message.success(t(response.data.message));
+      getUserDetail();
     } catch (error) {
-      message.error(error.response?.data.message || error.message);
+      message.error(t(error.response?.data.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
   };
 
   return (
-    <Form
-      name='register'
-      initialValues={{
-        name: user?.name,
-        surname: user?.surname,
-        email: user?.email,
-        language: 'tr',
-      }}
-      onFinish={onFinish}
-    >
-      <FormItem
-        name='name'
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Name!',
-          },
-        ]}
+    <>
+      <h1>{t('Profile')}</h1>
+      <Form
+        name='register'
+        initialValues={{
+          name: user?.name,
+          surname: user?.surname,
+          email: user?.email,
+          language: user?.language,
+        }}
+        onFinish={onFinish}
       >
-        <Input prefix={<UserOutlined />} placeholder='Name' />
-      </FormItem>
-      <FormItem
-        name='surname'
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Surname!',
-          },
-        ]}
-      >
-        <Input prefix={<UserOutlined />} placeholder='Surname' />
-      </FormItem>
-      <FormItem
-        name='email'
-        rules={[
-          {
-            type: 'email',
-          },
-          {
-            required: true,
-            message: 'Please input your Email!',
-          },
-        ]}
-      >
-        <Input prefix={<MailOutlined />} placeholder='Email' disabled />
-      </FormItem>
-      {/* <FormItem
+        <FormItem
+          name='name'
+          rules={[
+            {
+              required: true,
+              message: t('Please input your Name!'),
+            },
+          ]}
+        >
+          <Input prefix={<UserOutlined />} placeholder={t('Name')} />
+        </FormItem>
+        <FormItem
+          name='surname'
+          rules={[
+            {
+              required: true,
+              message: t('Please input your Surname!'),
+            },
+          ]}
+        >
+          <Input prefix={<UserOutlined />} placeholder={t('Surname')} />
+        </FormItem>
+        <FormItem
+          name='email'
+          rules={[
+            {
+              type: 'email',
+            },
+            {
+              required: true,
+              message: t('Please input your Email!'),
+            },
+          ]}
+        >
+          <Input prefix={<MailOutlined />} placeholder={t('Email')} disabled />
+        </FormItem>
+        {/* <FormItem
         name='password'
         rules={[
           {
@@ -123,22 +129,23 @@ const Profile = () => {
         <Input.Password prefix={<LockOutlined />} type='password' placeholder='Password' />
       </FormItem> */}
 
-      <FormItem name='language' rules={[{ required: true, message: 'Please select your Language!' }]}>
-        <Select
-          placeholder='Language'
-          options={[
-            { value: 'tr', label: <span>Türkçe</span> },
-            { value: 'en', label: <span>English</span> },
-          ]}
-        />
-      </FormItem>
+        <FormItem name='language' rules={[{ required: true, message: t('Please select your Language!') }]}>
+          <Select
+            placeholder={t('Language')}
+            options={[
+              { value: 'tr', label: <span>{t('Türkçe')}</span> },
+              { value: 'en', label: <span>{t('English')}</span> },
+            ]}
+          />
+        </FormItem>
 
-      <FormItem>
-        <Button type='primary' htmlType='submit' className='fullWidth'>
-          Update
-        </Button>
-      </FormItem>
-    </Form>
+        <FormItem>
+          <Button type='primary' htmlType='submit' className='fullWidth'>
+            {t('Update')}
+          </Button>
+        </FormItem>
+      </Form>
+    </>
   );
 };
 

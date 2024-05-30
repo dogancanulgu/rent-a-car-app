@@ -1,13 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Descriptions, Flex, Image, DatePicker, Button, message, Table, Popconfirm } from 'antd';
+import { Descriptions, Flex, Image, DatePicker, Button, message, Table, Popconfirm, Empty } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/loadingSlice';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const UserPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const router = useRouter();
   const [users, setUsers] = useState([]);
@@ -22,7 +24,7 @@ const UserPage = () => {
       const response = await axios.get('/api/users');
       setUsers(response.data.data);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -32,10 +34,10 @@ const UserPage = () => {
     try {
       dispatch(setLoading(true));
       const response = await axios.put(`/api/users/${id}`, { active: !active });
-      message.success(response.data.message);
+      message.success(t(response.data.message));
       getAllUsers();
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -43,51 +45,51 @@ const UserPage = () => {
 
   const columns = [
     {
-      title: 'User Id',
+      title: t('User Id'),
       dataIndex: '_id',
     },
     {
-      title: 'Email',
+      title: t('Email'),
       dataIndex: 'email',
     },
     {
-      title: 'Name',
+      title: t('Name'),
       dataIndex: 'name',
     },
     {
-      title: 'Surname',
+      title: t('Surname'),
       dataIndex: 'surname',
     },
     {
-      title: 'Language',
+      title: t('Language'),
       dataIndex: 'language',
     },
     {
-      title: 'Created Date',
+      title: t('Created Date'),
       dataIndex: 'createdAt',
       render: (time) => dayjs(time).format('DD-MM-YYYY HH:mm:ss'),
     },
     {
-      title: 'Updated Date',
+      title: t('Updated Date'),
       dataIndex: 'updatedAt',
       render: (time) => dayjs(time).format('DD-MM-YYYY HH:mm:ss'),
     },
     {
-      title: 'Active',
+      title: t('Active'),
       dataIndex: 'active',
-      render: (active) => (active ? 'Yes' : 'No'),
+      render: (active) => (active ? t('Yes') : t('No')),
     },
     {
-      title: 'Action',
+      title: t('Action'),
       render: (_, { _id, active }) => (
         <Popconfirm
-          title='Change the user activation'
-          description='Are you sure to change user activation?'
-          okText='Yes'
-          cancelText='No'
+          title={t('Change the user activation')}
+          description={t('Are you sure to change user activation?')}
+          okText={t('Yes')}
+          cancelText={t('No')}
           onConfirm={() => changeUserActivation(_id, active)}
         >
-          <Button danger>{active ? 'Blocked' : 'Approved'}</Button>
+          <Button danger>{active ? t('Block') : t('Approve')}</Button>
         </Popconfirm>
       ),
     },
@@ -95,8 +97,14 @@ const UserPage = () => {
 
   return (
     <>
-      <h1>All Users</h1>
-      <Table scroll={{ x: 'max-content' }} dataSource={users} columns={columns} />
+      <h1>{t('All Users')}</h1>
+      <Table
+        scroll={{ x: 'max-content' }}
+        dataSource={users}
+        columns={columns}
+        rowKey='_id'
+        locale={{ emptyText: <Empty description={t('No Data')} /> }}
+      />
     </>
   );
 };

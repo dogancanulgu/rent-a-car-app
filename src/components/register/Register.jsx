@@ -3,8 +3,11 @@ import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Divider, Select } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 const Register = ({ onFinish }) => {
+  const { t } = useTranslation();
+
   return (
     <Form name='register' initialValues={{ role: 'user', language: 'tr' }} onFinish={onFinish}>
       <FormItem
@@ -12,22 +15,22 @@ const Register = ({ onFinish }) => {
         rules={[
           {
             required: true,
-            message: 'Please input your Name!',
+            message: t('Please input your Name!'),
           },
         ]}
       >
-        <Input prefix={<UserOutlined />} placeholder='Name' />
+        <Input prefix={<UserOutlined />} placeholder={t('Name')} />
       </FormItem>
       <FormItem
         name='surname'
         rules={[
           {
             required: true,
-            message: 'Please input your Surname!',
+            message: t('Please input your Surname!'),
           },
         ]}
       >
-        <Input prefix={<UserOutlined />} placeholder='Surname' />
+        <Input prefix={<UserOutlined />} placeholder={t('Surname')} />
       </FormItem>
       <FormItem
         name='email'
@@ -37,51 +40,51 @@ const Register = ({ onFinish }) => {
           },
           {
             required: true,
-            message: 'Please input your Email!',
+            message: t('Please input your Email!'),
           },
         ]}
       >
-        <Input prefix={<MailOutlined />} placeholder='Email' />
+        <Input prefix={<MailOutlined />} placeholder={t('Email')} />
       </FormItem>
       <FormItem
         name='password'
         rules={[
           {
             required: true,
-            message: 'Please input your Password!',
+            message: t('Please input your Password!'),
           },
         ]}
       >
-        <Input.Password prefix={<LockOutlined />} type='password' placeholder='Password' />
+        <Input.Password prefix={<LockOutlined />} type='password' placeholder={t('Password')} />
       </FormItem>
 
-      <Form.Item name='role' rules={[{ required: true, message: 'Please select your Role!' }]}>
+      <Form.Item name='role' rules={[{ required: true, message: t('Please select your Role!') }]}>
         <Select
-          placeholder='Role'
+          placeholder={t('Role')}
           options={[
-            { value: 'user', label: <span>User</span> },
-            { value: 'owner', label: <span>Owner</span> },
+            { value: 'user', label: <span>{t('User')}</span> },
+            { value: 'owner', label: <span>{t('Owner')}</span> },
           ]}
         />
       </Form.Item>
 
-      <Form.Item name='language' rules={[{ required: true, message: 'Please select your Language!' }]}>
+      <Form.Item name='language' rules={[{ required: true, message: t('Please select your Language!') }]}>
         <Select
-          placeholder='Language'
+          placeholder={t('Language')}
           options={[
-            { value: 'tr', label: <span>Türkçe</span> },
-            { value: 'en', label: <span>English</span> },
+            { value: 'tr', label: <span>{t('Türkçe')}</span> },
+            { value: 'en', label: <span>{t('English')}</span> },
           ]}
         />
       </Form.Item>
 
       <FormItem>
         <Button type='primary' htmlType='submit' className='fullWidth'>
-          Register
+          {t('Register')}
         </Button>
       </FormItem>
       <Link href='/login' className='fl-r'>
-        Login now!
+        {t('Login now!')}
       </Link>
     </Form>
   );

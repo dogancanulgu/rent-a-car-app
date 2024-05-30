@@ -96,7 +96,7 @@ export async function POST(request) {
     bookingInfo.paymentId = payment.id;
 
     await Booking.create(bookingInfo);
-    return NextResponse.json({ message: 'Booking is addes successfully' }, { status: 200 });
+    return NextResponse.json({ message: 'Booking is created successfully' }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }

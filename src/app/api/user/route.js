@@ -10,7 +10,7 @@ export async function GET(request) {
     const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
     const user = await User.findById(userId).select('-password');
 
-    return NextResponse.json({ data: user, message: 'User info fethed successfully.' }, { status: 200 });
+    return NextResponse.json({ data: user, message: 'User info fethed successfully' }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }

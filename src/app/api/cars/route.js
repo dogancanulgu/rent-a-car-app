@@ -30,12 +30,11 @@ export async function POST(request) {
     const { _id: userId, role } = await getUserIdAndRoleByValidToken(request);
 
     // user can not be allowed to add a car
-    if(role === "user") {
-      throw new Error("You are not allowed to add a car");
+    if (role === 'user') {
+      throw new Error('You are not allowed to add a car');
     }
 
     const requestInfo = await request.json();
-    console.log('🚀 ~ GET ~ requestInfo:', requestInfo);
 
     const options = {
       method: 'GET',

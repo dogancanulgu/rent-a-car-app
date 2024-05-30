@@ -25,7 +25,7 @@ const Car = ({ params }) => {
       message.success(response.data.message);
       router.push('/cars');
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(error.response?.data?.message || error.message);
     } finally {
       dispatch(setLoading(false));
     }
@@ -38,7 +38,7 @@ const Car = ({ params }) => {
       console.log('🚀 ~ getCarDetails ~ response:', response.data.data);
       setCarDetails(response.data.data);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(error.response?.data?.message || error.message);
     } finally {
       dispatch(setLoading(false));
     }

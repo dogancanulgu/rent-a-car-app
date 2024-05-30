@@ -4,6 +4,7 @@ import { ConfigProvider, Spin } from 'antd';
 import { usePathname } from 'next/navigation';
 import { authPath } from '@/util/Util';
 import Layouts from '../layouts/Layouts';
+import AuthProvider from '../layouts/AuthProvider';
 import { useSelector } from 'react-redux';
 
 const AntdProviders = ({ children }) => {
@@ -22,7 +23,7 @@ const AntdProviders = ({ children }) => {
       }}
     >
       {loading && <Spin size='large' fullscreen />}
-      {authPath.includes(pathname) ? children : <Layouts>{children}</Layouts>}
+      {authPath.includes(pathname) ? <AuthProvider>{children}</AuthProvider> : <Layouts>{children}</Layouts>}
     </ConfigProvider>
   );
 };

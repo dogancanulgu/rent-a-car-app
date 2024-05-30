@@ -6,24 +6,13 @@ import AddCarForm from '@/components/addCarForm/AddCarForm';
 import { useRouter } from 'next/navigation';
 import { setLoading } from '@/redux/loadingSlice';
 import { useDispatch } from 'react-redux';
-
-const optionLists = [
-  // {
-  //   value: 'zhejiang',
-  //   label: 'Zhejiang',
-  //   isLeaf: false,
-  // },
-  // {
-  //   value: 'jiangsu',
-  //   label: 'Jiangsu',
-  //   isLeaf: false,
-  // },
-];
+import { useTranslation } from 'react-i18next';
 
 const AddCar = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
-  const [options, setOptions] = useState(optionLists);
+  const [options, setOptions] = useState([]);
   const [initialValues, setInitialValues] = useState({});
 
   const getCarMakes = async () => {
@@ -46,7 +35,7 @@ const AddCar = () => {
         })
       );
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     }
   };
 
@@ -71,7 +60,7 @@ const AddCar = () => {
       });
       setOptions([...options]);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     }
   };
 
@@ -92,7 +81,7 @@ const AddCar = () => {
       });
       setOptions([...options]);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     }
   };
 
@@ -118,7 +107,7 @@ const AddCar = () => {
       });
       setOptions([...options]);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     }
   };
 
@@ -139,7 +128,7 @@ const AddCar = () => {
         active: true,
       });
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     }
   };
 
@@ -173,11 +162,11 @@ const AddCar = () => {
     try {
       dispatch(setLoading(true));
       const response = await axios.post('/api/car', values);
-      message.success(response.data.message);
+      message.success(t(response.data.message));
       router.push('/cars');
       console.log(response.data.data);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }

@@ -20,6 +20,10 @@ body,
   height: 100vh;
 }
 
+.fullHeight {
+  height: 100%;
+}
+
 .uppercase {
   text-transform: uppercase;
 }

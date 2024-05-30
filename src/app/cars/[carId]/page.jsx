@@ -7,11 +7,13 @@ import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/loadingSlice';
 import dayjs from 'dayjs';
 import StripeCheckout from 'react-stripe-checkout';
+import { useTranslation } from 'react-i18next';
 
 const { PreviewGroup } = Image;
 const { RangePicker } = DatePicker;
 
 const CarInfo = ({ params }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
   const [carDetails, setCarDetails] = useState({});
@@ -30,7 +32,7 @@ const CarInfo = ({ params }) => {
       const response = await axios.get(`/api/car/${params.carId}`);
       setCarDetails(response.data.data);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -46,10 +48,10 @@ const CarInfo = ({ params }) => {
       dispatch(setLoading(true));
       const response = await axios.post('/api/bookings/checkAvailability', payload);
       setIsAvailable(true);
-      message.success(response.data.message);
+      message.success(t(response.data.message));
     } catch (error) {
       setIsAvailable(false);
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -68,10 +70,10 @@ const CarInfo = ({ params }) => {
       };
       dispatch(setLoading(true));
       const response = await axios.post('/api/bookings', payload);
-      message.success(response.data.message);
+      message.success(t(response.data.message));
       router.push('/bookings');
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -95,45 +97,45 @@ const CarInfo = ({ params }) => {
     // },
     {
       key: '3',
-      label: 'Total Days',
+      label: t('Total Days'),
       children: <p>{calculateDays()}</p>,
     },
     {
       key: '4',
-      label: 'Total Price',
+      label: t('Total Price'),
       children: <p>{calculateDays() * carDetails.price} TL</p>,
     },
   ];
   const items = [
     {
       key: '1',
-      label: 'Make',
+      label: t('Make'),
       children: <p>{carDetails.make}</p>,
     },
     {
       key: '2',
-      label: 'Model',
+      label: t('Model'),
       children: <p>{carDetails.model}</p>,
     },
     {
       key: '3',
-      label: 'Year',
+      label: t('Year'),
       children: <p>{carDetails.year}</p>,
     },
     {
       key: '4',
-      label: 'Fuel',
+      label: t('Fuel'),
       children: <p>{carDetails.fuel}</p>,
     },
 
     {
       key: '5',
-      label: 'Seats',
+      label: t('Seats'),
       children: <p>{carDetails.seats}</p>,
     },
     {
       key: '6',
-      label: 'Doors',
+      label: t('Doors'),
       children: <p>{carDetails.doors}</p>,
     },
     // {
@@ -155,7 +157,7 @@ const CarInfo = ({ params }) => {
           <Image width='calc(min(90%, 500px))' height={250} src={carDetails.images?.[0]} />
         </PreviewGroup>
       </div>
-      <Descriptions title='Car Details' items={items} />
+      <Descriptions title={t('Car Details')} items={items} />
       <div>{carDetails.description}</div>
       <Flex gap={15} justify='center'>
         <RangePicker
@@ -169,7 +171,7 @@ const CarInfo = ({ params }) => {
           }}
         />
         <Button type='primary' disabled={!startTime || !endTime} onClick={checkIsAvailable}>
-          Check Availability
+          {t('Check Availability')}
         </Button>
         <StripeCheckout
           amount={calculateDays() * carDetails.price * 100}
@@ -178,11 +180,11 @@ const CarInfo = ({ params }) => {
           token={bookNow}
         >
           <Button type='primary' disabled={!startTime || !endTime || !isAvailable}>
-            Book Now
+            {t('Book Now')}
           </Button>
         </StripeCheckout>
       </Flex>
-      {startTime && endTime && <Descriptions title='Rent Summary' items={summaryItems} />}
+      {startTime && endTime && <Descriptions title={t('Rent Summary')} items={summaryItems} />}
     </Flex>
   ) : null;
 };

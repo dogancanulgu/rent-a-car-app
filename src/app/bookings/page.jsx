@@ -1,13 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Descriptions, Flex, Image, DatePicker, Button, message, Table, Popconfirm } from 'antd';
+import { Descriptions, Flex, Image, DatePicker, Button, message, Table, Popconfirm, Empty } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/loadingSlice';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const Bookings = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const router = useRouter();
   const [bookingList, setBookingList] = useState([]);
@@ -22,7 +24,7 @@ const Bookings = () => {
       const response = await axios.get('/api/bookings');
       setBookingList(response.data.data);
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -31,11 +33,11 @@ const Bookings = () => {
   const cancelBooking = async (bookingId) => {
     try {
       dispatch(setLoading(true));
-      const response = await axios.put(`/api/bookings/${bookingId}`, { status: "cancelled" });
-      message.success(response.data.message);
+      const response = await axios.put(`/api/bookings/${bookingId}`, { status: 'cancelled' });
+      message.success(t(response.data.message));
       getBookingList();
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -43,59 +45,59 @@ const Bookings = () => {
 
   const columns = [
     {
-      title: 'Booking Id',
+      title: t('Booking Id'),
       dataIndex: '_id',
     },
     {
-      title: 'Rental Name Surname',
+      title: t('Rental Name Surname'),
       dataIndex: 'userId',
       render: (user) => `${user.name} ${user.surname}`,
     },
     {
-      title: 'Car Make',
+      title: t('Car Make'),
       dataIndex: 'carId',
       render: (car) => car.make,
     },
     {
-      title: 'Car Model',
+      title: t('Car Model'),
       dataIndex: 'carId',
       render: (car) => car.model,
     },
     {
-      title: 'Total Days',
+      title: t('Total Days'),
       dataIndex: 'totalDays',
     },
     {
-      title: 'Total Price',
+      title: t('Total Price'),
       dataIndex: 'totalPrice',
     },
     {
-      title: 'Start Time',
+      title: t('Start Time'),
       dataIndex: 'startTime',
       render: (startTime) => dayjs(startTime).format('DD-MM-YYYY HH:mm:ss'),
     },
     {
-      title: 'End Time',
+      title: t('End Time'),
       dataIndex: 'endTime',
       render: (endTime) => dayjs(endTime).format('DD-MM-YYYY HH:mm:ss'),
     },
     {
-      title: 'Status',
+      title: t('Status'),
       dataIndex: 'status',
-      render: (status) => status.toUpperCase(),
+      render: (status) => t(status),
     },
     {
-      title: 'Action',
+      title: t('Action'),
       render: (_, record) =>
         record.status === 'approved' ? (
           <Popconfirm
-            title='Cancel the booking'
-            description='Are you sure to cancel this booking?'
-            okText='Yes'
-            cancelText='No'
+            title={t('Cancel the booking')}
+            description={t('Are you sure to cancel this booking?')}
+            okText={t('Yes')}
+            cancelText={t('No')}
             onConfirm={() => cancelBooking(record._id)}
           >
-            <Button danger>Cancel</Button>
+            <Button danger>{t('Cancel')}</Button>
           </Popconfirm>
         ) : null,
     },
@@ -103,8 +105,14 @@ const Bookings = () => {
 
   return (
     <>
-      <h1>Bookings</h1>
-      <Table scroll={{ x: 'max-content' }} dataSource={bookingList} columns={columns} rowKey='_id' />
+      <h1>{t('Bookings')}</h1>
+      <Table
+        scroll={{ x: 'max-content' }}
+        dataSource={bookingList}
+        columns={columns}
+        rowKey='_id'
+        locale={{ emptyText: <Empty description={t('No Data')} /> }}
+      />
     </>
   );
 };

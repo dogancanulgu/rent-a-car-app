@@ -7,8 +7,10 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/loadingSlice';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 const RegisterPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -16,19 +18,19 @@ const RegisterPage = () => {
     try {
       dispatch(setLoading(true));
       const response = await axios.post('/api/auth/register', values);
-      message.success(response.data.message);
+      message.success(t(response.data.message));
       router.push('/login');
     } catch (error) {
-      message.error(error.response.data.message || error.message);
+      message.error(t(error.response?.data?.message || error.message));
     } finally {
       dispatch(setLoading(false));
     }
   };
 
   return (
-    <div className='flex-c-c h-full'>
+    <div className='flex-c-c fullHeight'>
       <div className='w-500 p-20' style={{ border: '1px solid black' }}>
-        <h1>Register</h1>
+        <h1 suppressHydrationWarning >{t('Register')}</h1>
         <Divider />
         <Register onFinish={onFinish} />
       </div>

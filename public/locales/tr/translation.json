@@ -104,5 +104,6 @@
   "Users info fethed successfully": "Kullanıcıların bilgileri başarıyla alındı.",
   "You are not authorized to get this request": "Bu isteği almak için yetkiniz yok",
   "You are not authorized to update the user which is not own profile": "Kendi profiliniz olmayan kullanıcıyı güncelleme yetkiniz yok",
-  "All Users": "Tüm Kullanıcılar"
+  "All Users": "Tüm Kullanıcılar",
+  "You are not authorized to access this page. Please login again": "Bu sayfaya erişim yetkiniz yok. Lütfen tekrar giriş yapın"
 }

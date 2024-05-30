@@ -43,7 +43,7 @@ export async function POST(request) {
 
     // set token
     const response = NextResponse.json({ message: 'Login successful' }, { status: 200 });
-    response.cookies.set('token', token, { httpOnly: true, path: '/' });
+    response.cookies.set('token', token, { httpOnly: true, secure: true, path: '/' });
 
     return response;
   } catch (error) {
